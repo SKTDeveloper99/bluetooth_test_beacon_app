@@ -1,27 +1,49 @@
-import 'package:bluetooth_test_beacon_app/firebase_options.dart';
-import 'package:bluetooth_test_beacon_app/authentication/login.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:bluetooth_test_beacon_app/controller/requirement_state_controller.dart';
+import 'package:bluetooth_test_beacon_app/view/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
+  // await Permission.bluetoothScan.request();
+  // await Permission.bluetoothAdvertise.request();
+  runApp(MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    Get.put(RequirementStateController());
+
+    final themeData = Theme.of(context);
+    final primary = Colors.blue;
+
+    return GetMaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        primarySwatch: primary,
+        appBarTheme: themeData.appBarTheme.copyWith(
+          brightness: Brightness.light,
+          elevation: 0.5,
+          color: Colors.white,
+          actionsIconTheme: themeData.primaryIconTheme.copyWith(
+            color: primary,
+          ),
+          iconTheme: themeData.primaryIconTheme.copyWith(
+            color: primary,
+          ),
+          textTheme: themeData.primaryTextTheme.copyWith(
+            headline6: themeData.textTheme.headline6?.copyWith(
+              color: primary,
+            ),
+          ),
+        ),
       ),
-      home: const LoginPage(),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: primary,
+      ),
+      home: HomePage(),
     );
   }
 }
